@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -27,6 +28,9 @@ class ImageControllerTest extends TestCase
             ])->assertOk();
 
         Storage::assertExists("images/$imageName");
+        $this->assertDatabaseHas(Image::class, [
+            'url' => "public/storage/images/$imageName"
+        ]);
     }
 
     public function test_it_will_reject_an_empty_image(): void

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ImageRequest;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,6 +14,7 @@ class ImageController extends Controller
         $image = $request->image;
 
         Storage::put("images/$image->name", $image);
-        $url = Storage::url("images/$image->name");
+
+        $image = Image::query()->create(['url' => Storage::url("images/$image->name")]);
     }
 }
