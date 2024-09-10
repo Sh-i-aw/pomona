@@ -14,7 +14,7 @@ class ImageControllerTest extends TestCase
     use DatabaseTransactions;
     use WithFaker;
 
-    public function test_it_stores_image()
+    public function test_it_stores_image(): void
     {
         Storage::fake();
         $imageName = 'photo1.jpg';
@@ -27,5 +27,15 @@ class ImageControllerTest extends TestCase
             ])->assertOk();
 
         Storage::assertExists("images/$imageName");
+    }
+
+    public function test_it_will_reject_an_empty_image(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('images.store'), [
+                'image' => 'oogabooga',
+            ])->assertUnprocessable();
     }
 }
